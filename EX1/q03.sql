@@ -2,7 +2,7 @@ SELECT	CONCAT(first_name, ' ', last_name)
 FROM	actor
 JOIN
 (
-	SELECT actor_idactor_id
+	SELECT actor_id
 		FROM film_actor
 		JOIN 
 		(
