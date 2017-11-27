@@ -1,41 +1,29 @@
 SELECT 
-    actor_id
+    CONCAT(first_name, ' ', last_name)
 FROM
-    film_actor
-WHERE
-    actor_id IN (SELECT 
-            COUNT(*) AS appearences
+    actor
+        JOIN
+    (SELECT 
+        actor_id
+    FROM
+        film_actor fa
+    GROUP BY actor_id
+    HAVING COUNT(fa.film_id) >= ALL (SELECT 
+            COUNT(film_actor.film_id)
         FROM
             film_actor
+        JOIN (SELECT 
+            film_id
+        FROM
+            inventory
+        JOIN (SELECT DISTINCT
+            inventory_id
+        FROM
+            rental
         WHERE
-            film_id IN (SELECT 
-                    film_id
-                FROM
-                    inventory
-                WHERE
-                    inventory_id IN (SELECT 
-                            inventory_id
-                        FROM
-                            rental
-                        WHERE
-                            rental_date >= '2005-06-01'
-                                AND rental_date <= '2005-06-30'))
-        GROUP BY actor_id)
-HAVING COUNT(actor_id) >= ALL (SELECT 
-        COUNT(*) AS appearences
-    FROM
-        film_actor
-    WHERE
-        film_id IN (SELECT 
-                film_id
-            FROM
-                inventory
-            WHERE
-                inventory_id IN (SELECT 
-                        inventory_id
-                    FROM
-                        rental
-                    WHERE
-                        rental_date >= '2005-06-01'
-                            AND rental_date <= '2005-06-30'))
-    GROUP BY actor_id)
+            rental_date >= '2005-06-01'
+                AND rental_date <= '2005-06-30') AS ren ON inventory.inventory_id = ren.inventory_id
+        GROUP BY film_id) AS inv ON film_actor.film_id = inv.film_id
+        GROUP BY actor_id)) AS fTOa ON actor.actor_id = fTOa.actor_id
+
+
