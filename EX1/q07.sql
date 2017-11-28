@@ -1,4 +1,4 @@
-SELECT name, len
+SELECT name
 FROM category
 JOIN (SELECT category_id, AVG(length) AS len
 	  FROM film_category
