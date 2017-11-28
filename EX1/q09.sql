@@ -1,4 +1,4 @@
-SELECT actor1Name, actor2Name
+SELECT actor1Name AS name1, actor2Name AS name2
 FROM (SELECT actor1Name, actor2Name, COUNT(*) AS numAppear
 	  FROM (SELECT CONCAT(x.first_name,' ', x.last_name)  AS actor1Name, CONCAT(y.first_name,' ', y.last_name) AS actor2Name
 			FROM actor AS x, actor AS y, film_actor AS z, film_actor AS w
